@@ -11,7 +11,7 @@ Response body:
 ```
 {
     uri: uri,
-    profileLocation: `/profile?requestId=${requestId}`,
+    profileLocation: `/profile?requestId=XXX`,
     success: true
 }
 ```
