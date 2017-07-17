@@ -1,0 +1,10 @@
+version: '2'
+services:
+
+  cdapp:
+    build: .
+    container_name: cdapp
+    restart: always
+    env_file: .env
+    ports:
+      - "80:8080"
