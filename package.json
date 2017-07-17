@@ -13,6 +13,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
-    "uport-connect": "^0.6.4"
+    "uport-connect": "^0.6.4",
+    "uuid4": "^1.0.0"
   }
 }

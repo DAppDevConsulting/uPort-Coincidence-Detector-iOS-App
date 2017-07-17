@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:6
 
 WORKDIR /root/app
 
@@ -6,4 +6,4 @@ COPY package.json .
 
 RUN yarn install
 
-DEBUG=app:* yarn start
+CMD yarn start

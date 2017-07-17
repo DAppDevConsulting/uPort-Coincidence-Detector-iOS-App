@@ -3,3 +3,5 @@ extends layout
 block content
   h1 Request Token
   a(href="#{uri}") #{uri}
+  br
+  a(href="/profile?requestId=#{requestId}") Get Profile
