@@ -50,6 +50,7 @@ router.get('/uport-uri', function(req, res, next) {
 router.get('/profile', function(req, res, next) {
     if (!req.query.requestId) {
         res.status(400).send({error: 'requestId is empty', success: false})
+        return
     }
 
     let credential = credentials[req.query.requestId]
