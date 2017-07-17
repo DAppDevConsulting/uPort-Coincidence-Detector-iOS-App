@@ -1,6 +1,6 @@
 # API
 
-## `GET /uport-uri`
+## GET /uport-uri
 
 Request headers:
 ```
@@ -16,7 +16,7 @@ Response body:
 }
 ```
 
-## `GET /profile`
+## GET /profile
 
 Query params:
 
@@ -31,7 +31,7 @@ Response body:
 }
 ```
 
-## `POST /hand-dance`
+## POST /hand-dance
 
 Request body:
 ```
