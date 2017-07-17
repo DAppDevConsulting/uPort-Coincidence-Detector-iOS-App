@@ -10,9 +10,9 @@ Accept: application/json
 Response body:
 ```
 {
-    uri: (string),
-    profileLocation: "/profile?requestId=XXX",
-    success: true
+  uri: (string),
+  profileLocation: "/profile?requestId=XXX",
+  success: true
 }
 ```
 
@@ -25,12 +25,12 @@ Query params:
 Response body:
 ```
 {
-    name: (string)
-    country: (string)
-    phone: (string)
-    image: {
-        url: (string)
-    }
+  name: (string)
+  country: (string)
+  phone: (string)
+  image: {
+    url: (string)
+  }
 }
 ```
 
@@ -49,6 +49,25 @@ Request body:
 Response body:
 ```
 {
-    success: true
+  success: true
+}
+```
+
+## POST /phone-bump
+
+Request body:
+```
+{
+  xAcceleration: <float>,
+  yAcceleration: <float>,
+  zAcceleration: <float>,
+  date: <float>
+}
+```
+
+Response body:
+```
+{
+  success: true
 }
 ```

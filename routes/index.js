@@ -23,6 +23,16 @@ router.get('/uport-uri', function(req, res, next) {
     })
 
     credentialPromises[requestId] = credentialPromise
+
+    // credentials[requestId] = {
+    //     name: 'John Doe',
+    //     phone: '+1234567890',
+    //     country: 'US',
+    //     image: {
+    //         url: 'https://placeholdit.imgix.net/~text?txt=John+Doe&w=150&h=150'
+    //     }
+    // }
+
     credentialPromise.then((credentials) => {
         console.log('credentials', credentials)
         credentials[requestId] = credentials
@@ -42,13 +52,13 @@ router.get('/profile', function(req, res, next) {
         res.status(400).send({error: 'requestId is empty', success: false})
     }
 
-    let credentials = credentials[req.query.requestId]
+    let credential = credentials[req.query.requestId]
     let credentialPromise = credentialPromises[req.query.requestId]
-    if (credentials) {
-        res.send(credentials)
+    if (credential) {
+        res.send(credential)
     } else if (credentialPromise) {
-        credentialPromise.then((credentials) => {
-            res.send(credentials)
+        credentialPromise.then((credential) => {
+            res.send(credential)
         }, (err) => {
             res.status(400).send({error: 'Could not get profile', success: false})
         })
@@ -58,6 +68,10 @@ router.get('/profile', function(req, res, next) {
 })
 
 router.get('/hand-dance', function(req, res, next) {
+    res.send({success: true})
+})
+
+router.get('/phone-bump', function(req, res, next) {
     res.send({success: true})
 })
 
