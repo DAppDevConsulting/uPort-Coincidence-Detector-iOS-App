@@ -10,7 +10,7 @@ Accept: application/json
 Response body:
 ```
 {
-    uri: uri,
+    uri: (string),
     profileLocation: "/profile?requestId=XXX",
     success: true
 }
@@ -25,9 +25,12 @@ Query params:
 Response body:
 ```
 {
+    name: (string)
     country: (string)
     phone: (string)
-    image: (string)
+    image: {
+        url: (string)
+    }
 }
 ```
 
