@@ -6,6 +6,7 @@ cd ..
 set -ex
 
 git reset --hard && \
+git pull && \
 docker-compose down && \
 docker-compose build && \
 docker-compose up -d
