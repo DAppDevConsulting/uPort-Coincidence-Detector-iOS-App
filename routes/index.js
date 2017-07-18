@@ -1,15 +1,16 @@
-var express = require('express')
-var router = express.Router()
-var uportApp = require('../uport/app')
-var uuid = require('uuid4')
+const express = require('express')
+const router = express.Router()
+const uportApp = require('../uport/app')
+const accessTokenEventBus = require('../uport/accessTokenEventBus')
+const uuid = require('uuid4')
 
-var credentials = {}
-var credentialPromises = {}
+var profiles = {}
 
 router.get('/uport-uri', function(req, res, next) {
     const requestId = req.query.requestId || uuid()
+    const callbackUrl = `${req.protocol}://${req.get('host')}/access-token-callback?requestId=${requestId}`
 
-    var credentialPromise = uportApp.requestCredentials((uri) => {
+    uportApp.requestCredentials(requestId, callbackUrl, (uri) => {
         const respData = {
             uri: uri,
             profileLocation: `/profile?requestId=${requestId}`,
@@ -20,31 +21,41 @@ router.get('/uport-uri', function(req, res, next) {
         } else {
             res.render('request-token', respData)
         }
-    })
-
-    credentialPromises[requestId] = credentialPromise
-
-    // credentials[requestId] = {
-    //     name: 'John Doe',
-    //     phone: '+1234567890',
-    //     country: 'US',
-    //     image: {
-    //         url: 'https://placeholdit.imgix.net/~text?txt=John+Doe&w=150&h=150'
-    //     }
-    // }
-
-    credentialPromise.then((credentials) => {
-        console.log('credentials', credentials)
-        credentials[requestId] = credentials
+    }).then((creds) => {
+        console.log('profiles', creds)
+        profiles[requestId] = creds
     }, (err) => {
         console.error('error', err)
     })
 
     setTimeout(() => {
-        // clean up credentials and promises for current requestId
-        delete credentials[requestId]
-        delete credentialPromises[requestId]
+        // clean up profiles for current requestId
+        delete profiles[requestId]
     }, 10*60e3) // 10 minutes
+})
+
+router.get('/access-token-callback', function(req, res, next) {
+    if (!req.query.requestId) {
+        res.status(400).send({error: 'requestId is empty', success: false})
+        return
+    }
+
+    res.render('access-token-callback')
+})
+
+router.get('/save-access-token', function(req, res, next) {
+    if (!req.query.requestId) {
+        res.status(400).send({error: 'requestId is empty', success: false})
+        return
+    }
+    if (!req.query.access_token) {
+        res.status(400).send({error: 'access_token is empty', success: false})
+        return
+    }
+
+    accessTokenEventBus.emit(req.query.requestId, req.query.access_token)
+
+    res.send({success: true})
 })
 
 router.get('/profile', function(req, res, next) {
@@ -53,27 +64,19 @@ router.get('/profile', function(req, res, next) {
         return
     }
 
-    let credential = credentials[req.query.requestId]
-    let credentialPromise = credentialPromises[req.query.requestId]
-    if (credential) {
-        res.send(credential)
-    } else if (credentialPromise) {
-        credentialPromise.then((credential) => {
-            res.send(credential)
-        }, (err) => {
-            res.status(400).send({error: 'Could not get profile', success: false})
+    let profile = profiles[req.query.requestId]
+    if (profile) {
+        res.send({
+            name: profile.name,
+            country: profile.country,
+            phone: profile.phone,
+            image: {
+                url: 'https://ipfs.infura.io' + profile.image.contentUrl
+            }
         })
     } else {
         res.status(404).send({error: 'Unknown requestId', success: false})
     }
-})
-
-router.get('/hand-dance', function(req, res, next) {
-    res.send({success: true})
-})
-
-router.get('/phone-bump', function(req, res, next) {
-    res.send({success: true})
 })
 
 module.exports = router
