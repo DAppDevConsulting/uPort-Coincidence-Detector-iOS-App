@@ -38,40 +38,45 @@ Response body:
 }
 ```
 
-## POST /hand-dance
+## POST /profile-exchange/hand-dance
 
 Request body:
 ```
 {
-  xAcceleration: <float>,
-  yAcceleration: <float>,
-  zAcceleration: <float>,
-  date: <float>
+  profile: (object), // Optional. Don't send if transmit mode is off
+  gesture: (string)
 }
 ```
 
 Response body:
 ```
 {
-  success: true
+  success: true,
+  profiles: [
+    (profile object 1),
+    (profile object 2),
+    ...
+  ]
 }
 ```
 
-## POST /phone-bump
+## POST /profile-exchange/phone-bump
 
 Request body:
 ```
 {
-  xAcceleration: <float>,
-  yAcceleration: <float>,
-  zAcceleration: <float>,
-  date: <float>
+  profile: (object), // Optional. Don't send if transmit mode is off
 }
 ```
 
 Response body:
 ```
 {
-  success: true
+  success: true,
+  profiles: [
+    (profile object 1),
+    (profile object 2),
+    ...
+  ]
 }
 ```
