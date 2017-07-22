@@ -7,6 +7,13 @@ const uuid = require('uuid4')
 var profiles = {}
 
 router.get('/uport-uri', function(req, res, next) {
+    /**
+     * 1. Generate random request ID
+     * 2. Generate access token callback URL
+     * 3. uport.RequestCredentials
+     * 4. Return uport link (with request token) to client (iOS)
+     * 5. Wait for credentials
+     */
     const requestId = req.query.requestId || uuid()
     const callbackUrl = `${req.protocol}://${req.get('host')}/access-token-callback?requestId=${requestId}`
 
